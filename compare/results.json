@@ -1,0 +1,75 @@
+{
+  "machine": "x86_64, Python 3.14.0",
+  "tools": {
+    "Icarus Verilog": "Icarus Verilog version 13.0 (devel) (s20221226-554-g25a84d5cf)",
+    "Verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)"
+  },
+  "rows": [
+    {
+      "simulator": "digsim python (functional)",
+      "build_s": 0.03416521707549691,
+      "run_s": 81.22000560094602,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "digsim native (functional)",
+      "build_s": 0.04312334000132978,
+      "run_s": 6.8761656798888,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "digsim python (gates)",
+      "build_s": 0.17228818801231682,
+      "run_s": 426.5008385879919,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "digsim native (gates)",
+      "build_s": 0.22773588495329022,
+      "run_s": 33.20230078487657,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "Icarus Verilog (RTL)",
+      "build_s": 0.008666591951623559,
+      "run_s": 2.19999247812666,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "Verilator (RTL)",
+      "build_s": 6.720244053984061,
+      "run_s": 0.09513065102510154,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    }
+  ]
+}

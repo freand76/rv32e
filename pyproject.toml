@@ -1,0 +1,34 @@
+[project]
+name = "rv32e"
+version = "0.1.0"
+description = "An RV32E RISC-V processor in Verilog, designed and verified with DigSim"
+readme = "README.md"
+authors = [{ name = "Fredrik Andersson", email = "freand@gmail.com" }]
+requires-python = ">=3.11"
+dependencies = ["digsim-logic-simulator==1.9.0"]
+
+[dependency-groups]
+dev = ["pytest==9.2.0"]
+
+[tool.uv]
+# Not a package: rv32sim is imported from this folder (python -m rv32sim, the tests)
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 99
+target-version = "py311"
+
+[tool.ruff.lint]
+# Q = flake8-quotes, TID = flake8-tidy-imports, I = isort, FA = flake8-future-annotations
+extend-select = ["Q", "TID", "I", "FA"]
+extend-ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+known-first-party = ["rv32sim"]
