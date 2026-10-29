@@ -1,0 +1,4 @@
+build/
+programs/bin/*.lst
+.venv/
+__pycache__/
