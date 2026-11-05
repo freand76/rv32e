@@ -39,6 +39,30 @@ The first run synthesizes the netlists (a few seconds each), later runs take the
 the cycles), `--lockstep`, `--vcd`, and `--ilm-width` and `--dlm-width` for the memories'
 address bits.
 
+## Speed
+
+The C self test (86,750 cycles) on the same RTL with digsim, Icarus Verilog and Verilator
+(`compare/run_compare.py --digsim-gates`, the test bench of the Verilog simulators is
+`compare/tb_rv32.v`). All of them retire the same instructions with the same results and
+print PASS. digsim runs the test bench of `rv32sim/bench.py`, with the memories and the
+console in Python: about half of the time of a cycle is that Python code.
+
+| Simulator | Netlist | Build (s) | Run (s) | Cycles/s | vs digsim 1.9.0 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| digsim 1.9.0, native engine (digsim-native 0.1.0) | functional | 0.04 | 7.00 | 12,391 | 1.0x |
+| digsim 1.9.0, native engine (digsim-native 0.1.0) | gates | 0.23 | 32.81 | 2,644 | 1.0x |
+| digsim, compiled blocks (digsim-native 0.2.0) | functional | 0.06 | 1.46 | 59,502 | 4.8x |
+| digsim, compiled blocks (digsim-native 0.2.0) | gates | 0.26 | 3.30 | 26,252 | 9.9x |
+| digsim, Python engine | functional | 0.03 | 78.43 | 1,106 | |
+| digsim, Python engine | gates | 0.21 | 436.02 | 199 | |
+| Icarus Verilog 14.0 (devel) | RTL | 0.05 | 1.92 | 45,095 | |
+| Verilator 5.032 | RTL | 7.33 | 0.08 | 1,088,065 | |
+
+Build is synthesis (from the cache in `build/`) and loading for digsim, compiling for
+Icarus Verilog and Verilator. The digsim with compiled blocks is the `compiled-sim` branch
+of digsim, not on PyPI yet (this project uses 1.9.0). Measured on one x86_64 machine,
+Python 3.15.
+
 ## The memory map
 
 | Address | What |
