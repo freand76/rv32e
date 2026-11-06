@@ -159,11 +159,13 @@ synthesis couldn't set parameters. This project is why it can now: `Synthesis`,
   `Console`. `LocalMemories` (the ILM and the DLM, the instruction port and the decoded
   data port) and the `Console` (character output and an exit register) are new digsim
   components, small Python classes like digsim's own.
-- **The clock is driven by the bench**, like the Fibonacci synthesis example drives its
-  ports: it sets `clk` and runs the circuit for a half period. It sets the ready inputs
-  in the low half, so the circuit has settled with them when the next cycle is sampled. A half period is 20 µs of
-  simulated time, more than any path, and the bench checks that no events are left. The
-  simulated time costs nothing, digsim jumps over it.
+- **A digsim `Clock` drives the circuit**, and the bench runs it from one edge to the
+  next with `circuit.run_until_edge(rising=clock)` (and `falling=`): each run goes
+  through the edge to just before the next one, when the logic has settled. The bench
+  samples the cycle before the rising edge and sets the ready inputs after it, so the
+  circuit has settled with them when the next cycle is sampled. A half period is 20 µs of
+  simulated time (25 kHz), more than any path. The simulated time costs nothing, digsim
+  jumps over it, and the native engine runs the clock without Python.
 - **Writes see the values from before the edge.** The memories write in their update at
   the rising edge, before the processor's registers change (their outputs change one delta
   cycle later).

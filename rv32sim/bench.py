@@ -3,9 +3,10 @@
 
 """
 The test bench: a digsim circuit with the processor (a YosysComponent built from the
-synthesized RTL), the local memories (ILM and DLM) and the console. The bench drives the
-clock, reset and the memories' ready signals itself, one cycle at a time, like the
-Fibonacci synthesis example drives its ports.
+synthesized RTL), the local memories (ILM and DLM) and the console. A digsim Clock drives
+the processor, the memories and the console, and the bench runs the circuit from one clock
+edge to the next (Circuit.run_until_edge()). It drives reset and the memories' ready
+signals itself.
 """
 
 from __future__ import annotations
@@ -16,16 +17,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from digsim.circuit import Circuit
-from digsim.circuit.components import YosysComponent
+from digsim.circuit.components import Clock, YosysComponent
 
 from .build import REGISTERS, netlist
 from .devices import DLM_ADDRESS_WIDTH, ILM_ADDRESS_WIDTH, Console, LocalMemories
 from .iss import Iss, Retired
 
 
-# The circuit runs until all events are done after each clock edge, a half period is
-# only the longest time the logic may take to settle (1 ns per gate or cell)
-HALF_PERIOD_NS = 20_000
+# The clock: 25 kHz, a half period of 20 us is far more than the logic takes to settle
+# after an edge (nanoseconds)
+FREQUENCY = 25_000
 
 CAUSES = {
     0: "instruction address misaligned",
@@ -95,6 +96,9 @@ class Bench:
             cpu.dmem_wdata.wire = device.d_wdata
             cpu.dmem_wstrb.wire = device.d_wstrb
         cpu.dmem_re.wire = ram.d_re
+        self.clock = Clock(self.circuit, "clk", frequency=FREQUENCY)
+        for clk in (cpu.clk, ram.clk, console.clk):
+            self.clock.O.wire = clk
         # The memories that are busy in a cycle, see run(stall=...)
         self._rng = random.Random(0)
         self._stall = 0.0
@@ -118,14 +122,6 @@ class Bench:
             self.ram.d_ready.value = dmem
             self.console.d_ready.value = dmem
 
-    def _half_cycle(self, clk: int) -> None:
-        self.cpu.clk.value = clk
-        self.ram.clk.value = clk
-        self.console.clk.value = clk
-        self.circuit.run(ns=HALF_PERIOD_NS)
-        if self.circuit._circuit_events:
-            raise RuntimeError(f"The logic didn't settle in {HALF_PERIOD_NS} ns")
-
     def reset(self) -> None:
         """Initialize the circuit, and reset the processor for two cycles"""
         self.circuit.init()
@@ -137,13 +133,13 @@ class Bench:
         self.cpu.dmem_ready.value = 1
         self.ram.d_ready.value = 1
         self.console.d_ready.value = 1
-        self._half_cycle(0)
+        # Two rising clock edges in reset (the clock starts low), then out of reset before
+        # the falling edge
         self.cpu.rst.value = 1
         for _ in range(2):
-            self._half_cycle(1)
-            self._half_cycle(0)
+            self.circuit.run_until_edge(rising=self.clock)
         self.cpu.rst.value = 0
-        self._half_cycle(0)
+        self.circuit.run_until_edge(falling=self.clock)
         self.cycles = 0
         self.stalls = 0
         self.x = [0] * REGISTERS
@@ -169,12 +165,12 @@ class Bench:
             raise RuntimeError("; ".join(self.ram.errors))
         if self.cpu.imem_ready.value != 1 or self.cpu.dmem_ready.value != 1:
             self.stalls += 1
-        self._half_cycle(1)
+        self.circuit.run_until_edge(rising=self.clock)
         if self._stall:
             # Each port busy in the next cycle with the probability of stall
             stall = self._stall
             self._set_ready(int(self._rng.random() >= stall), int(self._rng.random() >= stall))
-        self._half_cycle(0)
+        self.circuit.run_until_edge(falling=self.clock)
         self.cycles += 1
         if retired is not None and retired.rd is not None:
             self.x[retired.rd] = retired.value
