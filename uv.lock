@@ -31,7 +31,7 @@ wheels = [
 
 [[package]]
 name = "digsim-logic-simulator"
-version = "1.9.0"
+version = "1.11.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "digsim-native", marker = "(platform_machine in 'x86_64 aarch64' and sys_platform == 'linux') or (platform_machine in 'AMD64 ARM64' and sys_platform == 'win32') or sys_platform == 'darwin'" },
@@ -43,24 +43,24 @@ dependencies = [
     { name = "yowasp-runtime" },
     { name = "yowasp-yosys" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/27/cd/d6c749221078b5926fa33dae8f8604b417e82afd911bb1223fef3269c215/digsim_logic_simulator-1.9.0.tar.gz", hash = "sha256:ebc002a36d689fa38d2e85d00d9997cc4afc9bd6b95edee9e8f00581c7bb24a5", size = 391324, upload-time = "2026-10-28T19:24:16.572Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/10/4b/d5a5e9656e5e3b6c8fde0d2d97b9f9e2eba471cfa8aed0a10d54037f599d/digsim_logic_simulator-1.11.0.tar.gz", hash = "sha256:44fb1a66df1144515dd668d506994f3bb947eaa7a3e59b54784974da4c224ed5", size = 473116, upload-time = "2026-11-06T15:40:01.131Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/19/e6/5b45a87038c6ec6a2d56705881982849f91a407900356e4483ecf39d3e73/digsim_logic_simulator-1.9.0-py3-none-any.whl", hash = "sha256:e02f18e85efba00ffdf1c375b57af3e4f6c1f82e5a8dd3049c8de460fc21574b", size = 383892, upload-time = "2026-10-28T19:24:14.09Z" },
+    { url = "https://files.pythonhosted.org/packages/af/f9/e5381b46c481580932e84785bd5f44d51aa6f676262e3ee1d3dc5796ec3c/digsim_logic_simulator-1.11.0-py3-none-any.whl", hash = "sha256:ca65c03e15b8d65a885aaa428eae78fb8de3ba46780fe921e5e3a10ea8f974a1", size = 468473, upload-time = "2026-11-06T15:39:59.422Z" },
 ]
 
 [[package]]
 name = "digsim-native"
-version = "0.1.0"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/d2/a60f6b6f6399635f88dd79d7bedee1cbe7978eebb09b0fad4d542490a073/digsim_native-0.1.0-cp311-abi3-macosx_10_12_x86_64.whl", hash = "sha256:1092dd9825cbfa62ba4e9b187d926e113a3bd701434555f483f40458164b0f69", size = 354524, upload-time = "2026-10-27T18:19:07.6Z" },
-    { url = "https://files.pythonhosted.org/packages/2f/ec/9cefebebc40400f137d4b221fa5468bda27448ac502d291d5f00ad2a410b/digsim_native-0.1.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:257da54dd89568a4acf3f165d2a696da5bba21dc89c74512d46e1906e35f140b", size = 335250, upload-time = "2026-10-27T18:19:09.003Z" },
-    { url = "https://files.pythonhosted.org/packages/b3/75/523b435b4f6bc3673409aa88a9e1c8ef650b496e599bd29813791198f7a5/digsim_native-0.1.0-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b5648491dbb463d6c8f9c0ca88524223ea282db6249ca8c819047e104fab39d5", size = 357260, upload-time = "2026-10-27T18:19:10.408Z" },
-    { url = "https://files.pythonhosted.org/packages/9c/61/3d7e0f9047452760c1c74dc902b55433f00c371412fbcf530e8f354ade9e/digsim_native-0.1.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c2c54922e09561de9301cc9f06655dbe5d2b1d151415feb180eca6ebc15918c9", size = 364190, upload-time = "2026-10-27T18:19:11.801Z" },
-    { url = "https://files.pythonhosted.org/packages/90/2f/73f63f2da0f343b42f1931102d9b89f0a770eda787bee2dd22616711da84/digsim_native-0.1.0-cp311-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:e70256389a538727cf73058387a56038e69ddde13d83c476b85685e0ae495853", size = 535805, upload-time = "2026-10-27T18:19:13.308Z" },
-    { url = "https://files.pythonhosted.org/packages/ee/2c/bd3fe0f5fa85f3e20018286b6fd37044ad540bb49b3ddefb3ec68688acf9/digsim_native-0.1.0-cp311-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:0ae275311f07da036b4e974b222bc6b74caa009663cfcd4009d3bdcb066d107e", size = 576203, upload-time = "2026-10-27T18:19:14.937Z" },
-    { url = "https://files.pythonhosted.org/packages/8a/1d/f9614d3f914defd4c2ca988bf9b26fbe54f0a8b4fe702b86efdefdc8c796/digsim_native-0.1.0-cp311-abi3-win_amd64.whl", hash = "sha256:bda24afeefe0851fb158cf221a3d64f1fc062a8aac949f56083dd014a6c74d5a", size = 263787, upload-time = "2026-10-27T18:19:16.514Z" },
-    { url = "https://files.pythonhosted.org/packages/02/88/48b7c40d6351f61164d2dcdb89e94131970027685d4281ebc1449d053df2/digsim_native-0.1.0-cp311-abi3-win_arm64.whl", hash = "sha256:ac87c1b8837f38c2893f6e082d0b98633337b9117e89a89a836f0aa1fdcc1261", size = 247223, upload-time = "2026-10-27T18:19:18.087Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/b5/3d5f7954f59e04a5f03a095c0173925170a8b74032be4f67642f77eea415/digsim_native-0.3.0-cp311-abi3-macosx_10_12_x86_64.whl", hash = "sha256:7b836d41a1913d42938676c20f6409d2b46b868e99ca88ce3c7e08271db247ed", size = 482004, upload-time = "2026-11-06T08:05:07.079Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/88/0f8a3c2b6d152620e9905ac806944f66133274f52d7da0fb8254b0efb0fe/digsim_native-0.3.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:fcf902132da2c354be387191552003c88b60e0f8df3e84ed80e23b05848d3fbf", size = 452395, upload-time = "2026-11-06T08:05:08.479Z" },
+    { url = "https://files.pythonhosted.org/packages/b1/dd/5ac65343e7ce74d65e2ae762373022a2d6d47c34245be85d12ed9c625d57/digsim_native-0.3.0-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:c95dcbaf085e0003c7fe18c58c6865481d785062c68933821e76b4407bdbfada", size = 478939, upload-time = "2026-11-06T08:05:09.755Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/03/6dad82aa3eb9f50404efa4e2867e9a404f16d55d4ffb12ee6e802b15d20f/digsim_native-0.3.0-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:7f1c15917f06790312aecf22a545aad2093d1d6c721bc6850da9bb73d3e6d9ff", size = 492581, upload-time = "2026-11-06T08:05:11.055Z" },
+    { url = "https://files.pythonhosted.org/packages/da/d5/4fcb5d33d202e058fe432f763f94ff3c500b99202c176255c6222d65a3ff/digsim_native-0.3.0-cp311-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:44b1d537fdb6e1918d800141808a2c28df36b5d76c402839e72415e69aa189b8", size = 657845, upload-time = "2026-11-06T08:05:12.439Z" },
+    { url = "https://files.pythonhosted.org/packages/73/d0/1d80afa46c45f2640ca22ea3abbb74a1e61e0897d350335e9fb63cee854b/digsim_native-0.3.0-cp311-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:15b797e24a169aa8561b2fb1cb80a0d1fabf4a97e32dfcddd9556c14b48f850c", size = 703993, upload-time = "2026-11-06T08:05:14.067Z" },
+    { url = "https://files.pythonhosted.org/packages/03/b1/ba9d7a8b2dde17bfbf88d91d157173d07e7abc64865c08d940365c671e7c/digsim_native-0.3.0-cp311-abi3-win_amd64.whl", hash = "sha256:11bc023a5453eefb16e80914c2af484992942569a7adb8f5a7901174d78814a6", size = 393373, upload-time = "2026-11-06T08:05:15.533Z" },
+    { url = "https://files.pythonhosted.org/packages/1b/35/9d255df527217747cbe6572a1c447a905e6d37a15e0716f30cc21ace4750/digsim_native-0.3.0-cp311-abi3-win_arm64.whl", hash = "sha256:01a741904c174b45d614f7b523372fd2300a1ac04d0eee8f46e2259e49b71194", size = 368088, upload-time = "2026-11-06T08:05:16.735Z" },
 ]
 
 [[package]]
@@ -376,7 +376,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "digsim-logic-simulator", specifier = "==1.9.0" }]
+requires-dist = [{ name = "digsim-logic-simulator", specifier = "==1.11.0" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = "==9.2.0" }]
