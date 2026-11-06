@@ -51,17 +51,19 @@ console in Python: about half of the time of a cycle is that Python code.
 | --- | --- | ---: | ---: | ---: | ---: |
 | digsim 1.9.0, native engine (digsim-native 0.1.0) | functional | 0.04 | 7.00 | 12,391 | 1.0x |
 | digsim 1.9.0, native engine (digsim-native 0.1.0) | gates | 0.23 | 32.81 | 2,644 | 1.0x |
-| digsim, compiled blocks (digsim-native 0.2.0) | functional | 0.06 | 1.46 | 59,502 | 4.8x |
-| digsim, compiled blocks (digsim-native 0.2.0) | gates | 0.26 | 3.30 | 26,252 | 9.9x |
-| digsim, Python engine | functional | 0.03 | 78.43 | 1,106 | |
-| digsim, Python engine | gates | 0.21 | 436.02 | 199 | |
-| Icarus Verilog 14.0 (devel) | RTL | 0.05 | 1.92 | 45,095 | |
-| Verilator 5.032 | RTL | 7.33 | 0.08 | 1,088,065 | |
+| digsim 1.11.0, compiled blocks (digsim-native 0.3.0) | functional | 0.07 | 1.73 | 50,184 | 4.1x |
+| digsim 1.11.0, compiled blocks (digsim-native 0.3.0) | gates | 0.26 | 3.44 | 25,242 | 9.5x |
+| digsim 1.11.0, Python engine | functional | 0.05 | 91.32 | 950 | |
+| digsim 1.11.0, Python engine | gates | 0.24 | 445.22 | 195 | |
+| Icarus Verilog 14.0 (devel) | RTL | 0.01 | 1.92 | 45,109 | |
+| Verilator 5.032 | RTL | 0.05 | 0.10 | 847,934 | |
 
 Build is synthesis (from the cache in `build/`) and loading for digsim, compiling for
-Icarus Verilog and Verilator. The digsim with compiled blocks is the `compiled-sim` branch
-of digsim, not on PyPI yet (this project uses 1.9.0). Measured on one x86_64 machine,
-Python 3.15.
+Icarus Verilog and Verilator (Verilator's from its cache, a compile from scratch takes about
+7 s). This project uses digsim 1.11.0, where a digsim Clock
+drives the test bench. The rows of digsim 1.9.0 are from an earlier run on the same
+machine, when Icarus Verilog ran the test in the same 1.92 s. Measured on one x86_64
+machine, Python 3.15.
 
 ## The memory map
 

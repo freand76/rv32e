@@ -5,7 +5,7 @@ description = "An RV32E RISC-V processor in Verilog, designed and verified with 
 readme = "README.md"
 authors = [{ name = "Fredrik Andersson", email = "freand@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = ["digsim-logic-simulator==1.9.0"]
+dependencies = ["digsim-logic-simulator==1.11.0"]
 
 [dependency-groups]
 dev = ["pytest==9.2.0"]

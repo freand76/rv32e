@@ -268,20 +268,21 @@ used for the long runs.
 
 ## Comparison with Icarus Verilog and Verilator
 
-`compare/` runs the same RTL and the same self test on Icarus Verilog 13.0 (devel) and
+`compare/` runs the same RTL and the same self test on Icarus Verilog 14.0 (devel) and
 Verilator 5.032, with a Verilog test bench (`tb_rv32.v`) that has the same memory map and
 writes the same trace (pc, instruction, register write). `run_compare.py` builds and
 runs everything and writes `compare/results.md`, digsim in the engines of `--engines`.
-On one x86-64 machine, with nothing else running and no lockstep model, Python 3.14:
+On one x86-64 machine, with nothing else running and no lockstep model, Python 3.15,
+digsim 1.11.0 (digsim-native 0.3.0):
 
 | Simulator | rv32e self test (86,750 cycles) | Build |
 | --- | ---: | --- |
-| digsim native, functional netlist | 6.9 s, 12,600 cycles/s | synthesis 0.5 s (cached) |
-| digsim native, gates netlist | 33 s, 2,600 cycles/s | synthesis 4.0 s (cached) |
-| digsim Python, functional netlist | 81 s, 1,070 cycles/s | synthesis 0.5 s (cached) |
-| digsim Python, gates netlist | 427 s, 200 cycles/s | synthesis 4.0 s (cached) |
-| Icarus Verilog, RTL | 2.2 s, 39,000 cycles/s | < 0.1 s |
-| Verilator, RTL | 0.10 s, 910,000 cycles/s | 7 s (C++ compile) |
+| digsim native, functional netlist | 1.7 s, 50,000 cycles/s | synthesis 0.5 s (cached) |
+| digsim native, gates netlist | 3.4 s, 25,000 cycles/s | synthesis 4.0 s (cached) |
+| digsim Python, functional netlist | 91 s, 950 cycles/s | synthesis 0.5 s (cached) |
+| digsim Python, gates netlist | 445 s, 195 cycles/s | synthesis 4.0 s (cached) |
+| Icarus Verilog, RTL | 1.9 s, 45,000 cycles/s | < 0.1 s |
+| Verilator, RTL | 0.10 s, 850,000 cycles/s | 7 s (C++ compile) |
 
 All six runs pass with exactly the same trace. The operand isolation (above) also made
 Icarus a fifth faster, which is event-driven too. Verilator, which evaluates its logic
@@ -290,15 +291,19 @@ every cycle, didn't change.
 - **The RTL is portable.** It ran unchanged on three simulators with three different
   front ends (Yosys, Icarus, Verilator), and every one retired the same 86,750
   instructions with the same results. Nothing in it depended on digsim.
-- **Verilator is about 70 times faster than digsim's functional netlist** in the native
-  engine, and Icarus 3 times (850 and 37 times in the Python engine). The tests also run
-  the lockstep reference model, in Python too, which slows digsim down further. The C
-  self test takes 7 s in digsim's native engine (81 s in Python) and a tenth of a second
-  in Verilator.
-- **The native engine is 12 to 13 times faster than the Python engine**, at gate level
-  and functional. At gate level it simulates every gate in Rust, the Python engine does
-  one Python call per gate, and with 7,800 gates and their glitches the event count
-  dominates.
+- **Verilator is about 17 times faster than digsim's functional netlist** in the native
+  engine, and Icarus about as fast (890 and 47 times in the Python engine). About half of
+  digsim's time is the Python of the test bench (the memories and the console). The tests
+  also run the lockstep reference model, in Python too, which slows digsim down further.
+  The C self test takes 1.7 s in digsim's native engine (91 s in Python) and a tenth of a
+  second in Verilator.
+- **The native engine is 53 times faster than the Python engine** on the functional
+  netlist, and 130 times on the gates. It simulates the processor's netlist as one
+  compiled block: the cells in the order of their ranks, each once when an input
+  changes, without events between them. The Python engine does one Python call per cell,
+  and with 7,800 gates and their glitches the event count dominates. (With digsim 1.9.0,
+  before the compiled blocks, the native engine ran 12,400 cycles/s functional and 2,600
+  on the gates.)
 - **Icarus first ran the gate netlist at under 4 cycles/s**, much slower than digsim.
   Yosys writes the register file's read shifters as wide wires, and when one bit of a
   vector changes Icarus wakes every reader of the whole vector. `splitnets` (a wire per
@@ -351,11 +356,10 @@ Pros of digsim:
 
 Cons of digsim:
 
-- **Speed.** About 12,600 cycles/s functional and 2,600 cycles/s at gate level in the
-  native engine (a twelfth of that in Python), against 39,000 for Icarus and close to a
-  million for Verilator. A processor test that runs an OS boot or a benchmark suite
-  (billions of cycles) is out of reach, and the self test takes half a minute on the
-  gates netlist. The test suite works around it with small
+- **Speed.** About 50,000 cycles/s functional and 25,000 cycles/s at gate level in the
+  native engine (a fiftieth and a hundred-and-thirtieth of that in Python), against
+  45,000 for Icarus and close to a million for Verilator. A processor test that runs an OS
+  boot or a benchmark suite (billions of cycles) is out of reach. The test suite works around it with small
   programs, and with the long runs on the functional netlist behind `--slow`.
 - **Only synthesizable Verilog.** The design has to go through Yosys, so the test bench
   can't be Verilog: no `initial` blocks, `$display`, SystemVerilog assertions, classes,
