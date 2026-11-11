@@ -49,8 +49,8 @@ console in Python: about half of the time of a cycle is that Python code.
 
 | Simulator | Netlist | Build (s) | Run (s) | Cycles/s | vs Icarus Verilog |
 | --- | --- | ---: | ---: | ---: | ---: |
-| digsim 1.11.0, compiled blocks (digsim-native 0.3.0) | functional | 0.07 | 1.73 | 50,184 | 1.1x |
-| digsim 1.11.0, compiled blocks (digsim-native 0.3.0) | gates | 0.26 | 3.44 | 25,242 | 0.6x |
+| digsim 1.11.0, compiled blocks | functional | 0.07 | 1.73 | 50,184 | 1.1x |
+| digsim 1.11.0, compiled blocks | gates | 0.26 | 3.44 | 25,242 | 0.6x |
 | Icarus Verilog 14.0 (devel) | RTL | 0.01 | 1.92 | 45,109 | 1.0x |
 | Verilator 5.032 | RTL | 0.05 | 0.10 | 847,934 | 18.8x |
 
