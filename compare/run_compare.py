@@ -2,15 +2,19 @@
 # All rights reserved
 
 """
-Run the same RTL (rtl/rv32.v) and programs on digsim, Icarus Verilog and Verilator, check
+Run the same RTL (rtl/rv32.v) and programs on digsim, Icarus Verilog, ferrooxide and
+Verilator, check
 that they retire the same instructions with the same results, and time them.
 
     uv run python run_compare.py [--digsim-gates] [--engines python native]
+                                 [--ferrooxide PATH]
 
 The simulators:
 - digsim, functional netlist (and gates with --digsim-gates: slow, minutes), with each
   engine of --engines (both by default, "native" only if the package is installed)
 - Icarus Verilog on the RTL
+- ferrooxide on the RTL (if found: --ferrooxide, $FERROOXIDE or on the PATH), no separate
+  compile step: the build time is its parse, elaboration and JIT compile (from --stats)
 - Verilator on the RTL (--binary, the test bench with timing)
 
 Writes results.md and results.json next to this file.
@@ -22,6 +26,8 @@ import argparse
 import json
 import os
 import platform
+import re
+import shutil
 import subprocess
 import sys
 import time
@@ -92,6 +98,29 @@ def icarus(dut: Path, hex_file: Path) -> dict:
     return tool_result("Icarus Verilog (RTL)", build_s, run_s, out, trace)
 
 
+def ferrooxide(exe: str, dut: Path, hex_file: Path) -> dict:
+    trace = WORK / f"trace_{ISA}_ferrooxide.txt"
+    proc = run(
+        [exe, "--stats", str(HERE / "tb_rv32.v"), str(dut), f"+program={hex_file}", f"+trace={trace}"]
+    )
+    times = dict(re.findall(r"(parse|elaborate|jit|simulate) ([0-9.]+)s", proc.stderr))
+    build_s = sum(float(times[k]) for k in ("parse", "elaborate", "jit"))
+    run_s = float(times["simulate"])
+    return tool_result("ferrooxide (RTL)", build_s, run_s, proc.stdout, trace)
+
+
+def ferrooxide_version(exe: str) -> str:
+    # No --version: the crate version and the commit of the source tree next to the binary
+    root = Path(exe).resolve().parents[2]
+    try:
+        cargo = (root / "Cargo.toml").read_text()
+        ver = re.search(r'^version = "([^"]+)"', cargo, re.M).group(1)
+        commit = run(["git", "-C", str(root), "rev-parse", "--short", "HEAD"]).stdout.strip()
+        return f"ferrooxide {ver} ({commit})"
+    except (OSError, AttributeError, subprocess.CalledProcessError):
+        return "ferrooxide"
+
+
 def verilator(dut: Path, hex_file: Path) -> dict:
     obj = WORK / f"verilator_{ISA}"
     trace = WORK / f"trace_{ISA}_verilator.txt"
@@ -145,6 +174,11 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--digsim-gates", action="store_true")
     parser.add_argument("--engines", nargs="*", default=["python", "native"])
+    parser.add_argument(
+        "--ferrooxide",
+        default=os.environ.get("FERROOXIDE") or shutil.which("ferrooxide"),
+        help="the ferrooxide binary (default: $FERROOXIDE, or on the PATH)",
+    )
     args = parser.parse_args()
     from digsim.circuit import _native
 
@@ -161,6 +195,10 @@ def main() -> None:
         for engine in args.engines:
             rows.append(digsim(binary.read_bytes(), functional, engine))
     rows.append(icarus(RTL, hex_file))
+    if args.ferrooxide:
+        rows.append(ferrooxide(args.ferrooxide, RTL, hex_file))
+    else:
+        print("ferrooxide isn't found (--ferrooxide or $FERROOXIDE), it is left out")
     rows.append(verilator(RTL, hex_file))
 
     reference = rows[0]["trace"]
@@ -182,13 +220,15 @@ def main() -> None:
         "Icarus Verilog": version(["iverilog", "-V"]),
         "Verilator": version(["verilator", "--version"]),
     }
+    if args.ferrooxide:
+        tools["ferrooxide"] = ferrooxide_version(args.ferrooxide)
     (HERE / "results.json").write_text(
         json.dumps({"machine": machine, "tools": tools, "rows": rows}, indent=2)
     )
     lines = [
         f"# Simulator comparison: {PROGRAM}",
         "",
-        f"Machine: {machine}. {tools['Icarus Verilog']}, {tools['Verilator']}.",
+        f"Machine: {machine}. {', '.join(tools.values())}.",
         "Build: synthesis/compilation and loading, from the cache for digsim if the RTL didn't",
         "change. Every simulator retired the same instructions with the same results as",
         "the first digsim run when 'same trace' is yes.",

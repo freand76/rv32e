@@ -265,10 +265,10 @@ The functional netlist simulates whole words per cell, the gates netlist one bit
 gate, with a 1 ns delay per gate. Both run the same tests, and the functional one is
 used for the long runs.
 
-## Comparison with Icarus Verilog and Verilator
+## Comparison with Icarus Verilog, ferrooxide and Verilator
 
-`compare/` runs the same RTL and the same self test on Icarus Verilog 14.0 (devel) and
-Verilator 5.032, with a Verilog test bench (`tb_rv32.v`) that has the same memory map and
+`compare/` runs the same RTL and the same self test on Icarus Verilog 14.0 (devel),
+ferrooxide 0.1.0 and Verilator 5.032, with a Verilog test bench (`tb_rv32.v`) that has the same memory map and
 writes the same trace (pc, instruction, register write). `run_compare.py` builds and
 runs everything and writes `compare/results.md`, digsim in the engines of `--engines`.
 On one x86-64 machine, with nothing else running and no lockstep model, Python 3.15,
@@ -279,14 +279,15 @@ digsim 1.11.0 (digsim-native 0.3.0):
 | digsim native, functional netlist | 1.7 s, 50,000 cycles/s | 1.1x | synthesis 0.5 s (cached) |
 | digsim native, gates netlist | 3.4 s, 25,000 cycles/s | 0.6x | synthesis 4.0 s (cached) |
 | Icarus Verilog, RTL | 1.9 s, 45,000 cycles/s | 1.0x | < 0.1 s |
+| ferrooxide, RTL | 0.32 s, 270,000 cycles/s | 6.4x | JIT 0.09 s, in the same command |
 | Verilator, RTL | 0.10 s, 850,000 cycles/s | 18.8x | 7 s (C++ compile) |
 
-All four runs pass with exactly the same trace. The operand isolation (above) also made
+(ferrooxide measured later, against Icarus in the same run: 2.08 s there.) All five runs pass with exactly the same trace. The operand isolation (above) also made
 Icarus a fifth faster, which is event-driven too. Verilator, which evaluates its logic
 every cycle, didn't change.
 
-- **The RTL is portable.** It ran unchanged on three simulators with three different
-  front ends (Yosys, Icarus, Verilator), and every one retired the same 86,750
+- **The RTL is portable.** It ran unchanged on four simulators with four different
+  front ends (Yosys, Icarus, ferrooxide, Verilator), and every one retired the same 86,750
   instructions with the same results. Nothing in it depended on digsim.
 - **Verilator is about 17 times faster than digsim's functional netlist** in the native
   engine, and Icarus about as fast. About half of digsim's time is the Python of the

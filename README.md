@@ -41,22 +41,26 @@ address bits.
 
 ## Speed
 
-The C self test (86,750 cycles) on the same RTL with digsim, Icarus Verilog and Verilator
-(`compare/run_compare.py --digsim-gates`, the test bench of the Verilog simulators is
-`compare/tb_rv32.v`). All of them retire the same instructions with the same results and
-print PASS. digsim runs the test bench of `rv32sim/bench.py`, with the memories and the
-console in Python: about half of the time of a cycle is that Python code.
+The C self test (86,750 cycles) on the same RTL with digsim, Icarus Verilog, ferrooxide and
+Verilator (`compare/run_compare.py --digsim-gates --engines native --ferrooxide <binary>`, the
+test bench of the Verilog simulators is `compare/tb_rv32.v`). All of them retire the same
+instructions with the same results and print PASS. digsim runs the test bench of
+`rv32sim/bench.py`, with the memories and the console in Python: about half of the time of a
+cycle is that Python code.
 
 | Simulator | Netlist | Build (s) | Run (s) | Cycles/s | vs Icarus Verilog |
 | --- | --- | ---: | ---: | ---: | ---: |
-| digsim 1.11.0, compiled blocks | functional | 0.07 | 1.73 | 50,184 | 1.1x |
-| digsim 1.11.0, compiled blocks | gates | 0.26 | 3.44 | 25,242 | 0.6x |
-| Icarus Verilog 14.0 (devel) | RTL | 0.01 | 1.92 | 45,109 | 1.0x |
-| Verilator 5.032 | RTL | 0.05 | 0.10 | 847,934 | 18.8x |
+| digsim 1.11.0, compiled blocks | functional | 0.04 | 1.64 | 52,777 | 1.3x |
+| digsim 1.11.0, compiled blocks | gates | 0.17 | 3.43 | 25,264 | 0.6x |
+| Icarus Verilog 14.0 (devel) | RTL | 0.01 | 2.08 | 41,713 | 1.0x |
+| ferrooxide 0.1.0 (49a31d6) | RTL | 0.09 | 0.32 | 268,576 | 6.4x |
+| Verilator 5.032 | RTL | 0.05 | 0.08 | 1,021,729 | 24.5x |
 
 Build is synthesis (from the cache in `build/`) and loading for digsim, compiling for
 Icarus Verilog and Verilator (Verilator's from its cache, a compile from scratch takes about
-7 s). This project uses digsim 1.11.0, where a digsim Clock
+7 s). ferrooxide has no separate compile step: one command parses, elaborates, JIT compiles
+and simulates, and its build is the parse, elaboration and JIT time that it reports with
+`--stats`. This project uses digsim 1.11.0, where a digsim Clock
 drives the test bench. Measured on one x86_64 machine, Python 3.15.
 
 ## The memory map

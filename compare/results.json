@@ -2,35 +2,14 @@
   "machine": "x86_64, Python 3.15.0",
   "tools": {
     "Icarus Verilog": "Icarus Verilog version 14.0 (devel) (s20221226-554-g25a84d5cf)",
-    "Verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)"
+    "Verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+    "ferrooxide": "ferrooxide 0.1.0 (49a31d6)"
   },
   "rows": [
     {
-      "simulator": "digsim python (functional)",
-      "build_s": 0.046160992002114654,
-      "run_s": 91.31668336398434,
-      "cycles": 86750,
-      "exit_code": 0,
-      "passed": true,
-      "same_trace": true,
-      "instructions": 86750,
-      "isa": "rv32e"
-    },
-    {
       "simulator": "digsim native (functional)",
-      "build_s": 0.06805223500123248,
-      "run_s": 1.7286261280532926,
-      "cycles": 86750,
-      "exit_code": 0,
-      "passed": true,
-      "same_trace": true,
-      "instructions": 86750,
-      "isa": "rv32e"
-    },
-    {
-      "simulator": "digsim python (gates)",
-      "build_s": 0.23958821000996977,
-      "run_s": 445.22039278404554,
+      "build_s": 0.03855039799964288,
+      "run_s": 1.64369712700136,
       "cycles": 86750,
       "exit_code": 0,
       "passed": true,
@@ -40,8 +19,8 @@
     },
     {
       "simulator": "digsim native (gates)",
-      "build_s": 0.25954235799144953,
-      "run_s": 3.4366728009772487,
+      "build_s": 0.17314933099987684,
+      "run_s": 3.4338023599993903,
       "cycles": 86750,
       "exit_code": 0,
       "passed": true,
@@ -51,8 +30,19 @@
     },
     {
       "simulator": "Icarus Verilog (RTL)",
-      "build_s": 0.00781760097015649,
-      "run_s": 1.9230985679896548,
+      "build_s": 0.008627010000054725,
+      "run_s": 2.0797121040013735,
+      "cycles": 86750,
+      "exit_code": 0,
+      "passed": true,
+      "same_trace": true,
+      "instructions": 86750,
+      "isa": "rv32e"
+    },
+    {
+      "simulator": "ferrooxide (RTL)",
+      "build_s": 0.08600000000000001,
+      "run_s": 0.323,
       "cycles": 86750,
       "exit_code": 0,
       "passed": true,
@@ -62,8 +52,8 @@
     },
     {
       "simulator": "Verilator (RTL)",
-      "build_s": 0.047339815995655954,
-      "run_s": 0.1023074600379914,
+      "build_s": 0.048460352001711726,
+      "run_s": 0.08490507500027888,
       "cycles": 86750,
       "exit_code": 0,
       "passed": true,
